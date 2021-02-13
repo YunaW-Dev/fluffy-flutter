@@ -184,6 +184,13 @@
             </list>
           </value>
         </entry>
+        <entry key="vibration">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../../../Tools/flutter/.pub-cache/hosted/pub.dartlang.org/vibration-1.5.0/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="xml">
           <value>
             <list>
@@ -217,6 +224,7 @@
       <root url="file://$PROJECT_DIR$/../../../../Tools/flutter/.pub-cache/hosted/pub.dartlang.org/test_api-0.2.15/lib" />
       <root url="file://$PROJECT_DIR$/../../../../Tools/flutter/.pub-cache/hosted/pub.dartlang.org/typed_data-1.1.6/lib" />
       <root url="file://$PROJECT_DIR$/../../../../Tools/flutter/.pub-cache/hosted/pub.dartlang.org/vector_math-2.0.8/lib" />
+      <root url="file://$PROJECT_DIR$/../../../../Tools/flutter/.pub-cache/hosted/pub.dartlang.org/vibration-1.5.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../../Tools/flutter/.pub-cache/hosted/pub.dartlang.org/xml-3.6.1/lib" />
       <root url="file://$PROJECT_DIR$/../../../../Tools/flutter/bin/cache/pkg/sky_engine/lib" />
       <root url="file://$PROJECT_DIR$/../../../../Tools/flutter/packages/flutter/lib" />
