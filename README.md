@@ -3,5 +3,5 @@
 ![alt text](https://img.shields.io/badge/Firebase__Core-0.7.0-orange)
 ![alt text](https://img.shields.io/badge/Firebase__Database-6.0.0-orange)
 
-# fluffy-flutter
+# fluffy-flutter (family member version)
 Created with Firebase Realtime Database for long distance fun vibrating communication in my family.
