@@ -1,6 +1,8 @@
 import 'dart:developer';
 import 'dart:math';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:vibration/vibration.dart';
@@ -10,6 +12,10 @@ List<int> a = [1000];
 Color _color = Colors.orange;
 
 class HomeScreen extends StatefulWidget {
+  HomeScreen({this.app});
+  final FirebaseApp app;
+
+
   @override
   __HomeScreenState createState() => __HomeScreenState();
 }
@@ -49,14 +55,20 @@ void changeColor(){
 }
 
 class __HomeScreenState extends State<HomeScreen> {
+    final fireDb = FirebaseDatabase.instance;
   @override
   Widget build(BuildContext context) {
+    final ref = fireDb.reference();
     return Scaffold(
       body: Container(
         color: selected ? Colors.pink: Colors.greenAccent,
         // color: Colors.pink,
         child: GestureDetector(
         onTap: (){
+          ref.child('heartbeat')
+            .push()
+            .set('a')
+            .asStream();
           setState(() {
             changeColor();
           });
