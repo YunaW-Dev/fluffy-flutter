@@ -19,29 +19,27 @@ class HomeScreen extends StatefulWidget {
   @override
   __HomeScreenState createState() => __HomeScreenState();
 }
-  bool selected = false;
   Future<void> verifyVibration() async{
     if (await Vibration.hasVibrator()) {
       print("1 ontapped");
-      Vibration.vibrate(intensities: a);
-      if (await Vibration.hasAmplitudeControl()) {
-        print("2 ontapped");
-        Vibration.vibrate(amplitude: 128);
-        if (await Vibration.hasCustomVibrationsSupport()) {
-          print("3 ontapped");
-          Vibration.vibrate(duration: 1000);
-        } else {
-          Vibration.vibrate();
-          await Future.delayed(Duration(milliseconds: 500));
-          Vibration.vibrate();
-        }
-      }
+      Vibration.vibrate();
+      // if (await Vibration.hasAmplitudeControl()) {
+      //   print("2 ontapped");
+      //   Vibration.vibrate(amplitude: 128);
+      //   if (await Vibration.hasCustomVibrationsSupport()) {
+      //     print("3 ontapped");
+      //     Vibration.vibrate(duration: 1000);
+      //   } else {
+      //     Vibration.vibrate();
+      //     await Future.delayed(Duration(milliseconds: 500));
+      //     Vibration.vibrate();
+      //   }
+      // }
     }
   }
 
   void vibrateingLove(){
     Vibration.vibrate(duration: 1000);
-
   }
 
 void changeColor(){
@@ -54,24 +52,63 @@ void changeColor(){
   verifyVibration();
 }
 
+void changeColorWithoutVibration(){
+  _color = new Color.fromRGBO(
+      _random.nextInt(256),
+      _random.nextInt(256),
+      _random.nextInt(256),
+      1.0
+  );
+}
+
 class __HomeScreenState extends State<HomeScreen> {
     final fireDb = FirebaseDatabase.instance;
+    bool flag = false;
   @override
   Widget build(BuildContext context) {
     final ref = fireDb.reference();
+    final _heartbeat = ref.child('heartbeat');
+    _heartbeat.onValue.listen((event) {
+      var snapshot = event.snapshot;
+      print(snapshot.value.toString());
+      if (snapshot.value.toString().contains('panda')){
+        changeColor();
+      }
+    });
     return Scaffold(
       body: Container(
-        color: selected ? Colors.pink: Colors.greenAccent,
         // color: Colors.pink,
         child: GestureDetector(
         onTap: (){
-          ref.child('heartbeat')
-            .push()
-            .set('a')
-            .asStream();
-          setState(() {
-            changeColor();
-          });
+          // ref.child('heartbeat')
+          //   .push()
+          //   .set('a')
+          //   .asStream();
+          // print(_heartbeat.once().toString().contains('juju'));
+
+
+
+          if (_heartbeat.equalTo('panda') != null){
+                ref.child('heartbeat').set('juju');
+          }
+            setState(() {
+              changeColorWithoutVibration();
+            });
+
+
+          //
+          // _heartbeat.once()..listen((event) {
+          //   var snapshot = event.snapshot;
+          //   print(snapshot.value.toString());
+          //   if (snapshot.value.toString().contains('panda')){
+          //     ref.child('heartbeat').set('juju');
+          //   }
+          //   setState(() {
+          //     changeColorWithoutVibration();
+          //   });
+          //
+          // });
+
         },
 
           // log("in ontapped");
@@ -82,14 +119,6 @@ class __HomeScreenState extends State<HomeScreen> {
             width: double.infinity,
             height: double.infinity,
             color: _color,
-            // decoration: BoxDecoration(
-            //   gradient: LinearGradient(
-            //     colors:[
-            //     Colors.pink,Colors.pinkAccent,Colors.greenAccent,Colors.green,Colors.yellowAccent,
-            //   ],
-            //   begin: Alignment.centerLeft,
-            //   end: Alignment.centerRight),
-            // ),
             child: Center(
               child: Text(
                 'Love You, no matter what color the sky is <3'
