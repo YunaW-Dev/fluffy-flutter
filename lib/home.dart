@@ -3,9 +3,11 @@ import 'dart:math';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:fluffy_flutter/utils/time.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:vibration/vibration.dart';
+import 'utils/time.dart';
 
 final Random _random = new Random();
 List<int> a = [1000];
@@ -65,10 +67,26 @@ class __HomeScreenState extends State<HomeScreen> {
     final fireDb = FirebaseDatabase.instance;
     bool flag = false;
     var counter = 0;
+
+    DateTime now = DateTime.now();
+    TimeOfDay timeOfDay = TimeOfDay.now();
+
+    String _time = 'abc' ;
+
+    String getTimeOfTheDay(){
+      timeOfDay = TimeOfDay.now();
+      return timeOfDay.toString();
+    }
+
+
+
+
   @override
   Widget build(BuildContext context) {
     final ref = fireDb.reference();
     final _heartbeat = ref.child('heartbeat');
+    final _jujuTimeOfDay = ref.child('jujuTimeOfDay');
+    final _pandaTimeOfDay = ref.child('pandaTimeOfDay');
     _heartbeat.onValue.listen((event) {
       var snapshot = event.snapshot;
       print(snapshot.value.toString());
@@ -76,64 +94,104 @@ class __HomeScreenState extends State<HomeScreen> {
         changeColor();
       }
     });
+
+    void sendingLove(){
+      if (_heartbeat.equalTo('panda') != null || _heartbeat.equalTo('intermediate')!=null){
+        if (counter%2==0){
+          _heartbeat.set('juju');
+          // print(TimeOfDay.now().toString());
+          counter++;
+        }
+        else if (_heartbeat.equalTo('juju')!=null){
+          _heartbeat.set('intermediate');
+          _jujuTimeOfDay.set(getTimeOfTheDay());
+          counter++;
+        }
+      }
+    }
+
+    void retriveTime(){
+      _pandaTimeOfDay.onValue.listen((event) {
+        var snapshot = event.snapshot;
+        print(snapshot.value);
+        setState(() {
+          _time =  snapshot.value;
+          print(_time);
+        });
+        // return snapshot.value;
+      });
+    }
+
     return Scaffold(
       body: Container(
-        // color: Colors.pink,
-        child: GestureDetector(
-        onTap: (){
-          // ref.child('heartbeat')
-          //   .push()
-          //   .set('a')
-          //   .asStream();
-          // print(_heartbeat.once().toString().contains('juju'));
+        child: Column(
+          children: <Widget>[
+            GestureDetector(
+              onTap: (){
+                // ref.child('heartbeat')
+                //   .push()
+                //   .set('a')
+                //   .asStream();
+                // print(_heartbeat.once().toString().contains('juju'));
+                retriveTime();
+                sendingLove();
+                // setState(() {
+                //   changeColorWithoutVibration();
+                // });
 
 
+                //
+                // _heartbeat.once()..listen((event) {
+                //   var snapshot = event.snapshot;
+                //   print(snapshot.value.toString());
+                //   if (snapshot.value.toString().contains('panda')){
+                //     ref.child('heartbeat').set('juju');
+                //   }
+                //   setState(() {
+                //     changeColorWithoutVibration();
+                //   });
+                //
+                // });
 
-          if (_heartbeat.equalTo('panda') != null || _heartbeat.equalTo('intermediate')!=null){
-            if (counter%2==0){
-              _heartbeat.set('juju');
-              counter++;
-            }
-            else {
-              _heartbeat.set('intermediate');
-              counter++;
-            }
-          }
-            setState(() {
-              changeColorWithoutVibration();
-            });
+              },
 
+              // log("in ontapped");
+              // print("in ontapped");
+              // changeColor(selected);
 
-          //
-          // _heartbeat.once()..listen((event) {
-          //   var snapshot = event.snapshot;
-          //   print(snapshot.value.toString());
-          //   if (snapshot.value.toString().contains('panda')){
-          //     ref.child('heartbeat').set('juju');
-          //   }
-          //   setState(() {
-          //     changeColorWithoutVibration();
-          //   });
-          //
-          // });
-
-        },
-
-          // log("in ontapped");
-            // print("in ontapped");
-            // changeColor(selected);
-
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            color: _color,
-            child: Center(
-              child: Text(
-                'Love You, no matter what color the sky is <3'
+              child: Container(
+                width: double.infinity,
+                height: 300,
+                color: _color,
+                child: Center(
+                  child: Column(
+                    children: <Widget>[
+                      Spacer(),
+                      Text(
+                          'Love You, no matter what color the sky is <3'
+                      ),
+                      Text(
+                        'Panda has sent You a Love Vibration at: $_time'
+                      ),
+                      Spacer()
+                    ],
+                  ),
+                ),
               ),
+
+
             ),
-          ),
-        ),
+
+
+
+          ],
+        )
+
+
+
+
+
+
       ),
     );
   }
