@@ -5,3 +5,8 @@
 
 # fluffy-flutter (family member version)
 Created with Firebase Realtime Database for long distance fun vibrating communication in my family.
+
+
+
+
+note: google-services.js is included in .gitignore because this is an app for my family use only. However, as of now you are free to set it up with your own firebase.
