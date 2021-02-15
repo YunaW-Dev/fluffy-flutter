@@ -73,8 +73,8 @@ class __HomeScreenState extends State<HomeScreen> {
 
     String _time = 'abc' ;
 
-    String getTimeOfTheDay(){
-      timeOfDay = TimeOfDay.now();
+    Future<String> getTimeOfTheDay() async{
+      timeOfDay = await TimeOfDay.now();
       return timeOfDay.toString();
     }
 
@@ -95,23 +95,23 @@ class __HomeScreenState extends State<HomeScreen> {
       }
     });
 
-    void sendingLove(){
+    Future <void> sendingLove() async{
       if (_heartbeat.equalTo('panda') != null || _heartbeat.equalTo('intermediate')!=null){
         if (counter%2==0){
-          _heartbeat.set('juju');
+          await _heartbeat.set('juju');
           // print(TimeOfDay.now().toString());
           counter++;
         }
         else if (_heartbeat.equalTo('juju')!=null){
-          _heartbeat.set('intermediate');
-          _jujuTimeOfDay.set(getTimeOfTheDay());
+          await _heartbeat.set('intermediate');
+          await _jujuTimeOfDay.set(getTimeOfTheDay());
           counter++;
         }
       }
     }
 
-    void retriveTime(){
-      _pandaTimeOfDay.onValue.listen((event) {
+    void retriveTime() async{
+      await _pandaTimeOfDay.onValue.listen((event) {
         var snapshot = event.snapshot;
         print(snapshot.value);
         setState(() {
