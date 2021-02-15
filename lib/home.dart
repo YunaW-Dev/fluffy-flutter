@@ -73,8 +73,8 @@ class __HomeScreenState extends State<HomeScreen> {
 
     String _time = 'abc' ;
 
-    Future<String> getTimeOfTheDay() async{
-      timeOfDay = await TimeOfDay.now();
+    String getTimeOfTheDay() {
+      timeOfDay = TimeOfDay.now();
       return timeOfDay.toString();
     }
 
@@ -110,7 +110,7 @@ class __HomeScreenState extends State<HomeScreen> {
       }
     }
 
-    void retriveTime() async{
+    Future retriveTime() async{
       await _pandaTimeOfDay.onValue.listen((event) {
         var snapshot = event.snapshot;
         print(snapshot.value);
