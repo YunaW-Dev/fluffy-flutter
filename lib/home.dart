@@ -64,6 +64,7 @@ void changeColorWithoutVibration(){
 class __HomeScreenState extends State<HomeScreen> {
     final fireDb = FirebaseDatabase.instance;
     bool flag = false;
+    var counter = 0;
   @override
   Widget build(BuildContext context) {
     final ref = fireDb.reference();
@@ -88,8 +89,15 @@ class __HomeScreenState extends State<HomeScreen> {
 
 
 
-          if (_heartbeat.equalTo('panda') != null){
-                ref.child('heartbeat').set('juju');
+          if (_heartbeat.equalTo('panda') != null || _heartbeat.equalTo('intermediate')!=null){
+            if (counter%2==0){
+              _heartbeat.set('juju');
+              counter++;
+            }
+            else {
+              _heartbeat.set('intermediate');
+              counter++;
+            }
           }
             setState(() {
               changeColorWithoutVibration();
